@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIVEHOPE</title>
+
+<script src="https://kit.fontawesome.com/e70c1b9bfc.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.dots.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <!-- https://themewagon.github.io/givehope/?_ga=2.33104510.1541884392.1674717033-1247975031.1674717033 -->
+    <div style="display: flex;">
+        <h1 style="padding: 20px 30px;">IVR SYSTEM</h1>
+        <h2 style="padding: 25px 30px;">Hi, {{name}}</h2>
+        <!-- <form action="{{ url_for('logout') }}" style="text-align: right;" method="get">
+            <input type="submit" style="padding: 20px 20px;" value="Logout">
+        </form> -->
+        <div style="flex-grow:calc(1)"></div>
+        <div
+            style="width: 150px; height: 50px; background-color: rgba(255, 255, 255, 0.6); border-radius: 5px; margin: 20px; padding-top: 15px;">
+            <a href="#message" style="color: #2d2822;font-size: 16px; margin-top: 20px; padding-left: 15px;">Message
+                Compose</a>
+        </div>
+        <div
+            style="width: 150px; height: 50px; background-color: rgba(255, 255, 255, 0.6); border-radius: 5px; margin: 20px; padding-top: 15px;">
+            <a href="#history" style="color: #2d2822;font-size: 16px; margin-top: 20px; padding-left: 30px;">Call
+                History</a>
+        </div>
+    </div>
+    <div id="vanta-bg"></div>
+    <div class="text-overlay">
+        IVR SYSTEM
+    </div>
+    <section id="about" class="content">
+        <div class="container">
+            <div class="content-box">
+                <div class="box-1">
+                    <div>
+                        <p>Served Over</p>
+                        <h2>1,321,901</h2>
+                        <p>Children in 150</p>
+                        <p style="padding: 12px 0px 31px;">Countries</p>
+                        <a href="#">View OUR PROGRAM</a>
+                    </div>
+                </div>
+                <div class="box-2">
+                    <div>
+                        <p class="head">Who Are We?</p>
+                        <p class="text-2">
+                            While IVR systems offer numerous advantages, it's crucial to design and implement them
+                            thoughtfully to ensure a positive customer experience. Poorly designed IVR systems can lead
+                            to frustration among users. Therefore, usability, clear prompts, and effective call routing
+                            are essential considerations in their development and deployment.
+                        </p>
+                        <p class="text-2" style="margin-bottom: 9%; font-size: 15px;">
+                            IVR systems can handle a large volume of calls simultaneously, reducing the need for a large
+                            number of human operators.
+                            Automated interactions can save costs associated with manual call handling.
+                        </p>
+                        <a href="#">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="line">
+    <!-- ho its worls -->
+    <h1 style="text-align: center; font-size: 30px; margin-top: 30px; margin-bottom: 50px; color: #2d2822;">IVR SYSTEM
+    </h1>
+    <section id="message_edit">
+        <div class="container" style="height: auto;">
+            <form id="load">
+                <div class="content-box">
+                    <div class="card-2" style="padding: 0px 0px;">
+                        <div class="input-new-form">
+                            <label class="label-txt">Phone Number:</label>
+                            <label class="select">
+                                {% if messagelist %}
+                                <select id="message_count" onchange="updateContent(`{{str_msg}}`)">
+                                    <option>Select Phone</option>
+                                    {% for key in messagelist %}
+                                    <option value="{{ key }}">{{ key }}</option>
+                                    {% endfor %}
+                                </select>
+                                {% endif %}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="card-3">
+                        <div id="contentDisplay"></div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center; align-items: center; height: 100px;">
+                    <input id="message_load" class="btn" type="button" style="width: 100%;" value="Load">
+                </div>
+            </form>
+        </div>
+    </section>
+    <section id="message" class="content" style="margin-top: -150px;">
+        <div class="container">
+            <div class="content-box">
+                <div class="card-3">
+                    <div class="form">
+                        <form>
+                            <div class="input-new-form">
+                                <label class="label-txt">Phone Number:</label>
+                                <input class="select" id="twilio_number"
+                                    style="color: white; width: 60%;margin-right: 10%;"></input>
+                            </div>
+                            <div class="input-new-form">
+                                <label class="label-txt">Level Number:</label>
+                                <label class="select">
+                                    <select id="root_count">
+                                        <option value="1">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <h1 class="" style="margin-top: 30px; color: #2d2822; padding-left: 25px">Set Value:</h1>
+                            <div class="input-new-form">
+                                <label class="label-txt">Question Number</label>
+                                <label class="label-txt-content" style="text-align: center">Content</label>
+                            </div>
+                            <div class="input-new-form">
+                                <div class="label-txt">
+                                    <div id="question_count"></div>
+                                </div>
+                                <textarea cols="20" rows="5" id="message_content"
+                                    placeholder="Write Message Content"></textarea>
+                            </div>
+                            <button name="preview" id="addMessage" class="btn" style="margin-left: 25px">Add
+                                Message</button>
+                            <button name="submit" id="removeMessage" class="btn" style="margin-left: 25px">Remove All
+                                Message</button>
+                            <button name="submit" id="submit" class="btn" style="margin-left: 25px">Save
+                                Message</button>
+
+                        </form>
+                    </div>
+                </div>
+                <div class="card-2">
+                    <div class="form">
+                        <ul id="messagesList" style="color: #2d2822;">
+                            <!-- Existing messages will be displayed here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="line">
+    <!-- ho its worls -->
+    <h1 style="text-align: center; font-size: 30px; margin-top: 50px; color: #2d2822;">Call History</h1>
+    <section id="history" class="content">
+        <div class="container">
+            <table class="container">
+                <thead>
+                    <tr>
+                        <th>
+                            <h1>Twilio Phone Number</h1>
+                        </th>
+                        <th>
+                            <h1>From Phone</h1>
+                        </th>
+                        <th>
+                            <h1>History Time</h1>
+                        </th>
+                        <th>
+                            <h1>Digit Number</h1>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="calllist">
+                    {% if historylist %}
+                    {% for key, history in historylist.items() %}
+                    <tr>
+                        <td>{{ history['twilio'] }}</td>
+                        <td>{{ history['Phone'] }}</td>
+                        <td>{{ history['History Time'] }}</td>
+                        <td>
+                            {% for digit in history['Digit Number'] %}
+                            <span>{{ digit }},</span>
+                            {% endfor %}
+                            <span>End</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        <div class="foot-div">
+        </div>
+    </footer>
+</body>
+<script src="{{ url_for('static', filename='jquery.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // Initialize Vanta.js BIRDS effect
+        VANTA.DOTS({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00
+        });
+
+        // Add event listeners for mouseover and mouseout
+        document.querySelector('.text-overlay').addEventListener('mouseover', function () {
+            this.style.color = '#aqua'; // Change to a different color
+        });
+
+        document.querySelector('.text-overlay').addEventListener('mouseout', function () {
+            this.style.color = '#ffffff'; // Change back to the original color
+        });
+    });
+    function updateContent(messages) {
+        var messagelist = JSON.parse(messages);
+        var selectedPhone = document.getElementById("message_count").value;
+        var contentDisplay = document.getElementById("contentDisplay");
+
+        // Clear previous content
+
+        // Find the selected phone number in messagelist
+        var selectedMessages = messagelist[selectedPhone];
+        $("#contentDisplay").empty();
+        // Display corresponding content
+        if (selectedMessages) {
+            $("#contentDisplay").append(`<div id="msg0" class="messagebox"><label class="messagebox_title">Welcome Message</label><textarea name="0" rows="3" class="messagebox_content" readonly=true>${selectedMessages['content']}</textarea><input type="button" value="Edit" onclick="Edit(0)" class="messagebox_edit"><input type="button" class="messagebox_del" value="Delete" onclick="Del(0)"></input></div>`);
+            for (let i = 1; i <= 5; i++) {
+                if (selectedMessages[i]) {
+                    $("#contentDisplay").append(`<div id="msg${i}" class="messagebox"><label class="messagebox_title">Message ${i}</label><textarea name="${i}" rows="3" class="messagebox_content" readonly=true">${selectedMessages[i]['content']}</textarea><input type="button" value="Edit" onclick="Edit(${i})" class="messagebox_edit"><input type="button" class="messagebox_del" value="Delete" onclick="Del(${i})"></input></div>`);
+                    for (let j = 1; j <= 5; j++) {
+                        if (selectedMessages[i][j]) {
+                            $("#contentDisplay").append(`<div id="msg${i}${j}" class="messagebox"><label class="messagebox_title">Message ${i}-${j}</label><textarea name="${i}${j}" rows="3" class="messagebox_content" readonly=true">${selectedMessages[i][j]['content']}</textarea><input type="button" value="Edit" onclick="Edit(${i}${j})" class="messagebox_edit"><input type="button" class="messagebox_del" value="Delete" onclick="Del(${i}${j})"></input></div>`);
+                            for (let k = 1; k <= 5; k++) {
+                                if (selectedMessages[i][j][k]) {
+                                    $("#contentDisplay").append(`<div id="msg${i}${j}${k}" class="messagebox"><label class="messagebox_title">Message ${i}-${j}-${k}</label><textarea name="${i}${j}${k}" rows="3" class="messagebox_content" readonly=true">${selectedMessages[i][j][k]['content']}</textarea><input type="button" value="Edit" onclick="Edit(${i}${j}${k})" class="messagebox_edit"><input type="button" class="messagebox_del" value="Delete" onclick="Del(${i}${j}${k})"></input></div>`);
+                                    for (let m = 1; m <= 5; m++) {
+                                        if (selectedMessages[i][j][k][m]) {
+                                            $("#contentDisplay").append(`<div id="msg${i}${j}${k}${m}" class="messagebox"><label class="messagebox_title">Message ${i}-${j}-${k}-${m}</label><textarea name="${i}${j}${k}${m}" rows="3" class="messagebox_content" readonly=true">${selectedMessages[i][j][k][m]['content']}</textarea><input type="button" value="Edit" onclick="Edit(${i}${j}${k}${m})" class="messagebox_edit"><input type="button" class="messagebox_del" value="Delete" onclick="Del(${i}${j}${k}${m})"></input></div>`);
+                                            for (let n = 1; n <= 5; n++) {
+                                                if (selectedMessages[i][j][k][m][n]) {
+                                                    $("#contentDisplay").append(`<div id="msg${i}${j}${k}${m}${n}" class="messagebox"><label class="messagebox_title">Message ${i}-${j}-${k}-${m}-${n}</label><textarea name="${i}${j}${k}${m}${n}" rows="3" class="messagebox_content" readonly=true">${selectedMessages[i][j][k][m][n]['content']}</textarea><input type="button" value="Edit" onclick="Edit(${i}${j}${k}${m}${n})" class="messagebox_edit"><input type="button" class="messagebox_del" value="Delete" onclick="Del(${i}${j}${k}${m}${n})"></input></div>`);
+                                                }
+                                                else {
+                                                    continue;
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            continue;
+                                        }
+                                    }
+                                }
+                                else {
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    function Edit(id) {
+        console.log(id)
+        $(`#msg${id}`).find('.messagebox_content').prop("readonly", false);
+    }
+    function Del(id) {
+        console.log(id)
+        $(`#msg${id}`).remove();
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        var clientMessages = [];
+        var formValues = {};
+        var root_count = 0;
+        var twilio_number = 0;
+        $("#root_count").change(function () {
+            $("#question_count").empty();
+            root_count = $("#root_count").val();
+            for (var i = 0; i < root_count; i++) {
+                $("#question_count").append('<label class="select" style="color: white;"><select id="level' + i + '_count"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select>')
+            }
+        });
+        $("#addMessage").click(function () {
+            event.preventDefault();
+            var listItem = document.createElement('li');
+            var level0 = $("#level0_count").val();
+            var level1 = $("#level1_count").val();
+            var level2 = $("#level2_count").val();
+            var level3 = $("#level3_count").val();
+            var level4 = $("#level4_count").val();
+            var content = $("#message_content").val();
+            if (root_count == 0) {
+                clientMessages.push({ content });
+                listItem.textContent = 'Welcome Message: ' + content;
+            }
+            if (root_count == 1) {
+                clientMessages.push({ level0, content });
+                listItem.textContent = 'Message ' + level0 + ': ' + content;
+            }
+            if (root_count == 2) {
+                clientMessages.push({ level0, level1, content });
+                listItem.textContent = 'Message ' + level0 + '-' + level1 + ':' + content;
+            }
+            if (root_count == 3) {
+                clientMessages.push({ level0, level1, level2, content });
+                listItem.textContent = 'Message ' + level0 + '-' + level1 + '-' + level2 + ':' + content;
+            }
+            if (root_count == 4) {
+                clientMessages.push({ level0, level1, level2, level3, content });
+                listItem.textContent = 'Message ' + level0 + '-' + level1 + '-' + level2 + '-' + level3 + ':' + content;
+            }
+            if (root_count == 5) {
+                clientMessages.push({ level0, level1, level2, level3, level4, content });
+                listItem.textContent = 'Message ' + level0 + '-' + level1 + '-' + level2 + '-' + level3 + '-' + level4 + ':' + content;
+            }
+            $("#messagesList").append(listItem);
+            $("#level0_count").val = '';
+            $("#level1_count").val = '';
+            $("#level2_count").val = '';
+            $("#level3_count").val = '';
+            $("#level4_count").val = '';
+        })
+        $("#submit").click(function () {
+            event.preventDefault();
+
+            twilio_number = $("#twilio_number").val();
+
+            if (twilio_number == '') {
+                alert("You have to set Twilio Number");
+            }
+            else {
+                // Send the messages to the server using AJAX
+                fetch('/submit_messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ clientMessages, twilio_number }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Server Response:', data);
+                        // Optionally, reset the clientMessages array
+                        clientMessages = [];
+                        if (data.success == true)
+                            alert("Successful Submited!")
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+        })
+        $("#message_load").on("click", function () {
+            $("#twilio_number").val($('#message_count').val());
+            var form = document.getElementById('load');
+            for (var i = 0; i < form.elements.length; i++) {
+                var element = form.elements[i];
+                if (element.tagName.toLowerCase() === "textarea") {
+                    var listItem = document.createElement('li');
+                    formValues[element.name] = element.value;
+                    var content = element.value
+                    var name = element.name;
+                    var nameArray = name.split('');
+                    if (nameArray.length == 1) {
+                        if (name == '0') {
+                            clientMessages.push({ content });
+                            listItem.textContent = 'Welcome Message: ' + content;
+                        }
+                        else {
+                            var level0 = nameArray[0];
+                            clientMessages.push({ level0, content });
+                            listItem.textContent = 'Message ' + level0 + ': ' + content;
+                        }
+
+                    }
+                    if (nameArray.length == 2) {
+                        var level0 = nameArray[0];
+                        var level1 = nameArray[1];
+                        clientMessages.push({ level0, level1, content });
+                        listItem.textContent = 'Message ' + level0 + '-' + level1 + ':' + content;
+                    }
+                    if (nameArray.length == 3) {
+                        var level0 = nameArray[0];
+                        var level1 = nameArray[1];
+                        var level2 = nameArray[2];
+                        clientMessages.push({ level0, level1, level2, content });
+                        listItem.textContent = 'Message ' + level0 + '-' + level1 + '-' + level2 + ':' + content;
+                    }
+                    if (nameArray.length == 4) {
+                        var level0 = nameArray[0];
+                        var level1 = nameArray[1];
+                        var level2 = nameArray[2];
+                        var level3 = nameArray[3];
+                        clientMessages.push({ level0, level1, level2, level3, content });
+                        listItem.textContent = 'Message ' + level0 + '-' + level1 + '-' + level2 + '-' + level3 + ':' + content;
+                    }
+                    if (nameArray.length == 5) {
+                        var level0 = nameArray[0];
+                        var level1 = nameArray[1];
+                        var level2 = nameArray[2];
+                        var level3 = nameArray[3];
+                        var level4 = nameArray[4];
+                        clientMessages.push({ level0, level1, level2, level3, level4, content });
+                        listItem.textContent = 'Message ' + level0 + '-' + level1 + '-' + level2 + '-' + level3 + '-' + level4 + ':' + content;
+                    }
+                    $("#messagesList").append(listItem);
+                }
+            }
+        });
+        $('#removeMessage').click(function () {
+            event.preventDefault();
+            $("#messagesList").empty();
+            clientMessages = [];
+            console.log(clientMessages)
+        })
+    });
+</script>
+
+</html>
